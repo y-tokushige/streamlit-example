@@ -8,12 +8,12 @@ st.set_page_config(page_title="出荷チェック")
 from streamlit import caching
 import time
 
-import cv2
+import cv as cv
 from pyzbar.pyzbar import decode, ZBarSymbol
 
 def kensa_seiseki():
     # VideoCaptureインスタンス生成
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv.VideoCapture(0, cv.CAP_DSHOW)
     try:
         qr_data=""
         while cap.isOpened():
@@ -29,16 +29,16 @@ def kensa_seiseki():
                         dec_inf = qrcode.data.decode('utf-8')
 
                         qr_data = dec_inf
-                        frame = cv2.putText(frame, dec_inf, (x, y-6), font, .3, (255, 0, 0), 1, cv2.LINE_AA)
+                        frame = cv.putText(frame, dec_inf, (x, y-6), font, .3, (255, 0, 0), 1, cv.LINE_AA)
 
                         # バウンディングボックス
-                        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 1)
+                        cv.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 1)
 
                 # 画像表示
-                cv2.imshow('pyzbar', frame)
+                cv.imshow('pyzbar', frame)
 
             # ESCキーを押した場合中断する
-            k = cv2.waitKey(1)
+            k = cv.waitKey(1)
             if k == 27:
                 break
                 
@@ -47,18 +47,18 @@ def kensa_seiseki():
                 
         # 映像デバイスを閉じて終了する
         cap.release()
-        cv2.destroyAllWindows()
+        cv.destroyAllWindows()
         
         return(qr_data)
 
     except:
         # 映像デバイスを閉じて終了する
         cap.release()
-        cv2.destroyAllWindows()  
+        cv.destroyAllWindows()  
 # -----------------------------------------------------------
 # Init
 # -----------------------------------------------------------
-font = cv2.FONT_HERSHEY_SIMPLEX
+font = cv.FONT_HERSHEY_SIMPLEX
 
 # -----------------------------------------------------------
 # 画像キャプチャ
@@ -87,7 +87,3 @@ elif label == nouhin:
     st.error("検査成績表エラー")
 else:
     st.error("全エラー")
-
-
-
-

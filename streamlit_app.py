@@ -6,5 +6,5 @@ import pandas as pd
 import numpy as np
 import sqlite3
 
-st.title("アサダメッシュ株式会社　来場者受付")
+st.title("来場受付")
 st.text_input("テスト")

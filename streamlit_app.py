@@ -12,15 +12,11 @@ DB_PATH = "\\\\192.168.30.105\\share\\ITA室\\PowerBI用データ\\STREAMLIT.sql
 #------------------------------------------------------------------------------------
 @st.cache
 def sql_read(query):
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute(query)
-        df = c.fetchall() 
-        conn.close()
-    except:
-        st.error("予期せぬエラーが発生しました。再度実行して下さい")
-        conn.close()
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute(query)
+    df = c.fetchall() 
+    conn.close()
    
     return(df)
 #====================================================================================

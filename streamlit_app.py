@@ -20,6 +20,4 @@ DESKTOP_PATH = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + "\\Desktop\\"
 st.title("来場受付")
 st.text_input("テスト")
 file_up = st.file_uploader("ダイス入力表")
-if file_up:
-    daice_in = pd.read_excel(file_up, sheet_name=0)
-    st.write(daice_in) 
+

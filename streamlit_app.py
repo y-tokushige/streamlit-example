@@ -5,7 +5,6 @@ st.set_page_config(page_title="AsdSystem-",layout = "wide") #画面を広く使�
 import pandas as pd
 import numpy as np
 import sqlite3
-import openpyxl
 
 DB_PATH = "\\\\192.168.30.105\\share\\ITA室\\PowerBI用データ\\STREAMLIT.sqlite3"
 #------------------------------------------------------------------------------------

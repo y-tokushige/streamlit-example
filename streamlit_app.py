@@ -6,7 +6,7 @@ st.set_page_config(page_title="AsdSystem-Excelリフレッシュ") #画面を広
 #import win32com.client
 #import pythoncom
 #import tkinter as Tk
-from tkinter import filedialog
+#from tkinter import filedialog
 import os
 
 # デスクトップ

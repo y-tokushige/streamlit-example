@@ -15,11 +15,10 @@ st.set_page_config(page_title="AsdSystem-Excelリフレッシュ") #画面を広
 # メイン
 #====================================================================================
 def main():
-    if st.button("ファイル選択"):
-        filetype = [("Excel","*.xls*"),("すべて","*")]
-        file_path = tkinter.filedialog.askopenfilename(filetypes = filetype,initialdir = DESKTOP_PATH)
-    else:
-        st.stop()
+    uploaded_file = st.file_uploader("Choose your .pdf file", type="pdf")
+    st.write(uploaded_file.getvalue())
+    
+    st.stop()
 
     pythoncom.CoInitialize() 
     xl = Dispatch('Excel.Application')

@@ -7,10 +7,10 @@ st.set_page_config(page_title="AsdSystem-Excelリフレッシュ") #画面を広
 #import pythoncom
 #import tkinter as Tk
 #from tkinter import filedialog
-import os
+#import os
 
 # デスクトップ
-DESKTOP_PATH = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + "\\Desktop\\"
+#DESKTOP_PATH = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + "\\Desktop\\"
 #====================================================================================
 # メイン
 #====================================================================================

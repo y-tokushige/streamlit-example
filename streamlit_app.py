@@ -1,29 +1,36 @@
+#====================================================================================
+# ライブラリ
+#====================================================================================
 import streamlit as st
-from streamlit import caching #キャッシュクリア
-from streamlit.script_runner import StopException, RerunException #rerun用
-st.set_page_config(page_title="AsdSystem-",layout = "wide") #画面を広く使うための設定
-import pandas as pd
-import numpy as np
-import sqlite3
+st.set_page_config(page_title="AsdSystem-Excelリフレッシュ") #画面を広く使うための設定
+from win32com.client import Dispatch
+import pythoncom
+import tkinter
+from tkinter import filedialog
+import os
 
-DB_PATH = "\\\\192.168.30.105\\share\\ITA室\\PowerBI用データ\\STREAMLIT.sqlite3"
-#------------------------------------------------------------------------------------
-# データベース(読込)
-#------------------------------------------------------------------------------------
-@st.cache
-def sql_read(query):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute(query)
-    df = c.fetchall() 
-    conn.close()
-   
-    return(df)
+# デスクトップ
+DESKTOP_PATH = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + "\\Desktop\\"
 #====================================================================================
 # メイン
 #====================================================================================
-st.title("来場受付")
-st.text_input("テスト")
-df = sql_read(f"SELECT * FROM ログイン")
-login_df = pd.DataFrame(df)
-st.write(login_df) 
+def main():
+    if st.button("ファイル選択"):
+        filetype = [("Excel","*.xls*"),("すべて","*")]
+        file_path = tkinter.filedialog.askopenfilename(filetypes = filetype,initialdir = DESKTOP_PATH)
+    else:
+        st.stop()
+
+    pythoncom.CoInitialize() 
+    xl = Dispatch('Excel.Application')
+    xl.Visible = False
+    wb = xl.Workbooks.Open(file_path)
+    #if i == 1:
+    #    pass
+    wb.Close(SaveChanges=False)
+    xl.Quit()
+
+    st.success("処理完了")
+
+if __name__ == "__main__":
+    main()

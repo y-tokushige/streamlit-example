@@ -4,7 +4,7 @@
 import streamlit as st
 st.set_page_config(page_title="AsdSystem-Excelリフレッシュ") #画面を広く使うための設定
 #import win32com.client
-import pythoncom
+#import pythoncom
 import tkinter
 from tkinter import filedialog
 import os

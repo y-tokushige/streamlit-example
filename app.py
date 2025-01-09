@@ -27,37 +27,35 @@ data = [["", "", "", "", ""] for _ in range(10)]
 df = pd.DataFrame(data, columns=columns, index=range(1, 11))
 
 try:
-    col=st.columns(2)
-    with col[0]:
-        eddf = st.data_editor(df)
+    eddf = st.data_editor(df)
 
-        eddf = eddf.replace("", np.nan) # 空白をnanへ返還
-        eddf = eddf.dropna(how='all', subset=["ロット番号", "使用コイル数"]).reset_index(drop=True) # nan行を削除
-        eddf = eddf.applymap(lambda x: jaconv.z2h(x, kana=False, ascii=True, digit=True))# 全角を半角に変換
+    eddf = eddf.replace("", np.nan) # 空白をnanへ返還
+    eddf = eddf.dropna(how='all', subset=["ロット番号", "使用コイル数"]).reset_index(drop=True) # nan行を削除
+    eddf = eddf.applymap(lambda x: jaconv.z2h(x, kana=False, ascii=True, digit=True))# 全角を半角に変換
 
-        eddf["材質"] = zaisitu
-        eddf["線径"] = float(senkei)
-        eddf["メッシュ数"] = int(meshsu)
-        eddf["巾"] = int(haba)
+    eddf["材質"] = zaisitu
+    eddf["線径"] = float(senkei)
+    eddf["メッシュ数"] = int(meshsu)
+    eddf["巾"] = int(haba)
 
-        eddf["使用始めのM数"] = pd.to_numeric(eddf["使用始めのM数"], errors='coerce').fillna(0).astype(int)
-        eddf["使用終わりのM数"] = pd.to_numeric(eddf["使用終わりのM数"], errors='coerce').fillna(0).astype(int)
-        eddf["使用コイル数"] = pd.to_numeric(eddf["使用コイル数"], errors='coerce').fillna(0).astype(int)
-        eddf["同ロット数"] = pd.to_numeric(eddf["同ロット数"], errors='coerce').fillna(0).astype(int)
+    eddf["使用始めのM数"] = pd.to_numeric(eddf["使用始めのM数"], errors='coerce').fillna(0).astype(int)
+    eddf["使用終わりのM数"] = pd.to_numeric(eddf["使用終わりのM数"], errors='coerce').fillna(0).astype(int)
+    eddf["使用コイル数"] = pd.to_numeric(eddf["使用コイル数"], errors='coerce').fillna(0).astype(int)
+    eddf["同ロット数"] = pd.to_numeric(eddf["同ロット数"], errors='coerce').fillna(0).astype(int)
 
-        #try:
-        eddf["計算結果"] = np.where(
-            eddf["材質"] == "タングステン",
-            (((100/2.54*eddf["メッシュ数"]*((eddf["巾"]/1000)+0.2)*((eddf["線径"]/1000)*(eddf["線径"]/1000))*6.225)*(eddf["使用終わりのM数"]-eddf["使用始めのM数"])/eddf["使用コイル数"]*eddf["同ロット数"]/1000))*2.92,  # 計算式1
-            (((100/2.54*eddf["メッシュ数"]*((eddf["巾"]/1000)+0.2)*((eddf["線径"]/1000)*(eddf["線径"]/1000))*6.225)*(eddf["使用終わりのM数"]-eddf["使用始めのM数"])/eddf["使用コイル数"]*eddf["同ロット数"]/1000))  # 計算式2
-        )
+    #try:
+    eddf["計算結果"] = np.where(
+        eddf["材質"] == "タングステン",
+        (((100/2.54*eddf["メッシュ数"]*((eddf["巾"]/1000)+0.2)*((eddf["線径"]/1000)*(eddf["線径"]/1000))*6.225)*(eddf["使用終わりのM数"]-eddf["使用始めのM数"])/eddf["使用コイル数"]*eddf["同ロット数"]/1000))*2.92,  # 計算式1
+        (((100/2.54*eddf["メッシュ数"]*((eddf["巾"]/1000)+0.2)*((eddf["線径"]/1000)*(eddf["線径"]/1000))*6.225)*(eddf["使用終わりのM数"]-eddf["使用始めのM数"])/eddf["使用コイル数"]*eddf["同ロット数"]/1000))  # 計算式2
+    )
 
-    with col[1]:
-        df2=eddf[["ロット番号","計算結果"]]
-        df2.index = range(1, len(df2) + 1)
-        grouped_df = df2.groupby("ロット番号").sum()
-        grouped_df = grouped_df.round(2)
-        st.write(grouped_df)
+
+    df2=eddf[["ロット番号","計算結果"]]
+    df2.index = range(1, len(df2) + 1)
+    grouped_df = df2.groupby("ロット番号").sum()
+    grouped_df = grouped_df.round(2)
+    st.write(grouped_df)
 
 
 

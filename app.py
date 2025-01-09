@@ -7,7 +7,7 @@ import numpy as np
 
 # `st.columns`のリストを取得
 
-col=st.columns(10)
+col=st.columns(5)
 with col[0]:
     zaisitu = st.selectbox("材質", ["", "タングステン"])
 with col[1]:
@@ -27,7 +27,7 @@ data = [["", "", "", "", ""] for _ in range(10)]
 df = pd.DataFrame(data, columns=columns, index=range(1, 11))
 
 try:
-    col=st.columns([1,0.3,1.2,])
+    col=st.columns(2)
     with col[0]:
         eddf = st.data_editor(df)
 

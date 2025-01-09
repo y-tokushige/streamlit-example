@@ -1,27 +1,27 @@
 import panel as pn
-import matplotlib.pyplot as plt
-import numpy as np
- 
-# Panel拡張の初期化
+
+# パネルの拡張機能を有効化
 pn.extension()
- 
-# シンプルなサイン波関数を作成
-def plot_sine_wave(frequency):
-    x = np.linspace(0, 2 * np.pi, 500)
-    y = np.sin(frequency * x)
- 
-    fig, ax = plt.subplots()
-    ax.plot(x, y)
-    ax.set_title(f"サイン波 (周波数: {frequency})")
- 
-    return fig
- 
-# 周波数をコントロールするスライダーを作成
-frequency_slider = pn.widgets.FloatSlider(name='Frequency', start=0.5, end=5.0, step=0.1, value=1.0)
- 
-# スライダーの値に応じてプロットを動的に更新
-interactive_plot = pn.bind(plot_sine_wave, frequency=frequency_slider)
- 
-# ダッシュボードの表示
-dashboard = pn.Column(frequency_slider, interactive_plot)
-dashboard.show()
+
+# テキスト入力ウィジェットを作成
+text_input = pn.widgets.TextInput(name='テキスト入力', placeholder='ここに入力してください...')
+
+# 入力内容を表示する関数を定義
+def update_text(event):
+    text_output.value = text_input.value
+
+# テキスト入力の値が変更されたときに関数を呼び出す
+text_input.param.watch(update_text, 'value')
+
+# テキスト表示用のパネルを作成
+text_output = pn.pane.Markdown("入力された内容がここに表示されます")
+
+# レイアウトを作成
+layout = pn.Column(
+    "## シンプルなPanelサンプル",
+    text_input,
+    text_output
+)
+
+# アプリケーションとしてサーブ
+layout.servable()

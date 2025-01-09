@@ -1,2 +1,4 @@
 pandas
 streamlit
+st_aggrid
+jaconv

@@ -3,6 +3,7 @@ st.set_page_config(page_title="材料計算",layout = "wide",page_icon="\\\\192.
 #from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode, ColumnsAutoSizeMode
 import pandas as pd
 import jaconv
+import numpy as np
 
 # `st.columns`のリストを取得
 
@@ -21,11 +22,36 @@ meshsu = jaconv.z2h(meshsu,digit=True, ascii=True)#全角⇒半角変換
 haba = jaconv.z2h(haba,digit=True, ascii=True)#全角⇒半角変換
 
 
-columns = ["ロット番号", "同ロット数", "使用始めのＭ数", "使用終わりのM数", "使用kg数"]
+columns = ["ロット番号", "使用コイル数","同ロット数", "使用始めのM数", "使用終わりのM数"]
 data = [["", "", "", "", ""] for _ in range(10)]
 df = pd.DataFrame(data, columns=columns, index=range(1, 11))
 
-edited_df = st.data_editor(df)
+eddf = st.data_editor(df)
+eddf = eddf.replace("", np.nan)
+eddf = eddf.dropna(how='all', subset=["ロット番号", "使用コイル数"]).reset_index(drop=True)
+
+eddf["材質"] = zaisitu
+eddf["線径"] = float(senkei)
+eddf["メッシュ数"] = int(meshsu)
+eddf["巾"] = int(haba)
+
+eddf["使用始めのM数"] = pd.to_numeric(eddf["使用始めのM数"], errors='coerce').fillna(0).astype(int)
+eddf["使用終わりのM数"] = pd.to_numeric(eddf["使用終わりのM数"], errors='coerce').fillna(0).astype(int)
+eddf["使用コイル数"] = pd.to_numeric(eddf["使用コイル数"], errors='coerce').fillna(0).astype(int)
+eddf["同ロット数"] = pd.to_numeric(eddf["同ロット数"], errors='coerce').fillna(0).astype(int)
+
+#try:
+eddf["計算結果"] = np.where(
+    eddf["材質"] == "タングステン",
+    1,  # 計算式1
+    (((100/2.54*eddf["メッシュ数"]*((eddf["巾"]/1000)+0.2)*((eddf["線径"]/1000)*(eddf["線径"]/1000))*6.225)*(eddf["使用終わりのM数"]-eddf["使用始めのM数"])/eddf["使用コイル数"]*eddf["同ロット数"]/1000))*2.92  # 計算式2
+)
+#except:
+#    pass
+
+st.write(eddf)
+
+
 
 
 

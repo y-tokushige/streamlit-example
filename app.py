@@ -7,7 +7,7 @@ import numpy as np
 
 # `st.columns`のリストを取得
 
-col=st.columns(5)
+col=st.columns(4)
 with col[0]:
     zaisitu = st.selectbox("材質", ["", "タングステン"])
 with col[1]:
